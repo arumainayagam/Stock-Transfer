@@ -24,7 +24,12 @@ def get_request_details(docname):
 
 @frappe.whitelist()
 def recieve_stock_transfer(items, from_w, material_request):
-
+	transit_ware = frappe.db.get_list("Warehouse", 
+	fields= ["name"],
+	filters={"default_transit": 1})[0]
+	if not transit_ware:
+		frappe.throw(_("Please Set Transit Warehouse To Proceed"))
+			
 	args = json.loads(items)
 
 	stock_entry = frappe.new_doc("Stock Entry")
@@ -35,7 +40,7 @@ def recieve_stock_transfer(items, from_w, material_request):
 		elif x["t_warehouse"]:
 			tot = x["t_warehouse"]
 		stock_entry.append("items", {
-		"s_warehouse": "Transit Warehouse - VC",
+		"s_warehouse": transit_ware,
 		"t_warehouse": tot,
 		"item_code": x["item_code"],
 		"qty": x["qty"],
@@ -56,6 +61,11 @@ def recieve_stock_transfer(items, from_w, material_request):
 
 @frappe.whitelist()
 def send_stock_transfer(items, from_w, material_request):
+	transit_ware = frappe.db.get_list("Warehouse", 
+	fields= ["name"],
+	filters={"default_transit": 1})[0]
+	if not transit_ware:
+		frappe.throw(_("Please Set Transit Warehouse To Proceed"))	
 
 	args = json.loads(items)
 	stock_entry = frappe.new_doc("Stock Entry")
@@ -67,7 +77,7 @@ def send_stock_transfer(items, from_w, material_request):
 			tot = x["s_warehouse"]
 		stock_entry.append("items", {
 		"s_warehouse": tot,
-		"t_warehouse": "Transit Warehouse - VC",
+		"t_warehouse": transit_ware,
 		"item_code": x["item_code"],
 		"qty": x["qty"],
 		"description": x["description"],
