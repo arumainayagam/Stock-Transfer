@@ -26,10 +26,10 @@ def get_request_details(docname):
 def recieve_stock_transfer(items, from_w, material_request):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
-	filters={"default_transit": 1})[0]
+	filters={"default_transit": 1})[0].name
 	if not transit_ware:
 		frappe.throw(_("Please Set Transit Warehouse To Proceed"))
-			
+
 	args = json.loads(items)
 
 	stock_entry = frappe.new_doc("Stock Entry")
@@ -63,7 +63,7 @@ def recieve_stock_transfer(items, from_w, material_request):
 def send_stock_transfer(items, from_w, material_request):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
-	filters={"default_transit": 1})[0]
+	filters={"default_transit": 1})[0].name
 	if not transit_ware:
 		frappe.throw(_("Please Set Transit Warehouse To Proceed"))	
 
