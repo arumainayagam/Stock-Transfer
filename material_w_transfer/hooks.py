@@ -14,6 +14,9 @@ app_license = "MIT"
 # Includes in <head>
 # ------------------
 
+doctype_js = {
+    "Material Request":["custom_script/material_request.js"]
+}
 # include js, css files in header of desk.html
 # app_include_css = "/assets/material_w_transfer/css/material_w_transfer.css"
 # app_include_js = "/assets/material_w_transfer/js/material_w_transfer.js"

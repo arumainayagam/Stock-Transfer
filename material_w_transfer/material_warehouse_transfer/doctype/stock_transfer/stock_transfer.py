@@ -11,6 +11,30 @@ class StockTransfer(Document):
 
 
 @frappe.whitelist()
+def make_stock_transfer(docname, items):
+	frappe.db.set_value("Material Request", docname, 'status', "Ordered")
+	frappe.db.set_value("Material Request", docname, 'per_ordered', 25)
+	args = json.loads(items)
+	stock_entry = frappe.new_doc("Stock Transfer")
+	stock_entry.material_request = docname
+	for x in args:
+		stock_entry.append("items", {
+		"t_warehouse": x["warehouse"],
+		"item_code": x["item_code"],
+		"qty": x["qty"],
+		"description": x["description"],
+		"conversion_factor": x["conversion_factor"],
+		"stock_uom": x["stock_uom"],
+		"transfer_qty": x["qty"]*x["conversion_factor"],
+		"uom": x["uom"]
+		})
+	stock_entry.insert()
+	
+
+	return stock_entry.name
+
+
+@frappe.whitelist()
 def get_request_details(docname):
 
 	items = frappe.db.get_list("Material Request Item", 
@@ -95,4 +119,3 @@ def send_stock_transfer(items, from_w, material_request):
 
 	return {"name": stock_entry.name}		
 
-		
