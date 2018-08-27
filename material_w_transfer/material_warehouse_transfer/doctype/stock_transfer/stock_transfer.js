@@ -35,6 +35,7 @@ frappe.ui.form.on('Stock Transfer', {
  		}	
  		if(frm.doc.status === "Pending" && !frm.doc.__islocal){
 			cur_frm.add_custom_button(__("Send"), function(){
+				if (frm.doc.from_warehouse && frm.doc.to_warehouse) {
 				frappe.call({
 					method: 'material_w_transfer.material_warehouse_transfer.doctype.stock_transfer.stock_transfer.send_stock_transfer',
 					args: {
@@ -51,6 +52,10 @@ frappe.ui.form.on('Stock Transfer', {
 
 					}
 				});
+			}
+			else if(!frm.doc.from_warehouse && !frm.doc.to_warehouse){
+				frappe.throw(__("Please select default From Warehouse and To Warehouse"));
+			}
  			});
  		}		    
 
