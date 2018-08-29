@@ -88,7 +88,7 @@ def get_request_details(docname):
 
 
 @frappe.whitelist()
-def recieve_stock_transfer(items, from_w, material_request):
+def recieve_stock_transfer(items, from_w, material_request=None):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
 	filters={"default_transit": 1})[0].name
@@ -118,7 +118,7 @@ def recieve_stock_transfer(items, from_w, material_request):
 		})
 	stock_entry.insert()
 	stock_entry.submit()
-	if self.material_request:
+	if material_request:
 		frappe.db.set_value("Material Request", material_request, 'status', "Transferred")
 		frappe.db.set_value("Material Request", material_request, 'per_ordered', 100)
 
@@ -126,7 +126,7 @@ def recieve_stock_transfer(items, from_w, material_request):
 
 
 @frappe.whitelist()
-def send_stock_transfer(items, from_w, material_request):
+def send_stock_transfer(items, from_w, material_request=None):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
 	filters={"default_transit": 1})[0].name
@@ -156,7 +156,7 @@ def send_stock_transfer(items, from_w, material_request):
 
 	stock_entry.insert()
 	stock_entry.submit()
-	if self.material_request:
+	if material_request:
 		frappe.db.set_value("Material Request", material_request, 'status', "Issued")
 		frappe.db.set_value("Material Request", material_request, 'per_ordered', 50)
 
