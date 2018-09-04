@@ -23,19 +23,19 @@ frappe.ui.form.on('Stock Transfer', {
 						from_w: frm.doc.from_warehouse,
 						items: frm.doc.items,
 						material_request: frm.doc.material_request,
-
+						docname: frm.doc.name
 					},
 					callback: function(r) {
 						console.log(r.message)
 						frappe.msgprint("Succesfully Recieved")
-						frm.set_value("status", "Recieved")
-						cur_frm.save();
+						// frm.set_value("status", "Recieved")
+						cur_frm.reload_doc();
 
 					}
 				});
  			});
  		}	
- 		if(frm.doc.status === "Pending" && !frm.doc.__islocal && frm.doc.docstatus == 1){
+ 		if(frm.doc.status === "Pending" && frm.doc.docstatus == 1){
 			cur_frm.add_custom_button(__("Send"), function(){
 				if (frm.doc.from_warehouse && frm.doc.to_warehouse) {
 				frappe.call({
@@ -44,13 +44,14 @@ frappe.ui.form.on('Stock Transfer', {
 						items: frm.doc.items,
 						from_w: frm.doc.from_warehouse,
 						material_request: frm.doc.material_request,
-
+						docname: frm.doc.name
 					},
 					callback: function(r) {
 						console.log(r.message)
 						frappe.msgprint("Succesfully Sent")
-						frm.set_value("status", "Sent")
-						cur_frm.save();
+						// frm.set_value("status", "Sent")
+						cur_frm.reload_doc();
+
 
 					}
 				});

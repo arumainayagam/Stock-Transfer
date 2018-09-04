@@ -15,6 +15,11 @@ from erpnext.manufacturing.doctype.bom.bom import validate_bom_no
 from erpnext.stock.utils import get_bin
 class StockTransfer(Document):
 	pass
+	def validate(self):
+		for d in self.get('items'):
+			d.s_warehouse = self.from_warehouse
+			d.t_warehouse = self.to_warehouse
+			
 	def get_item_details(self, args=None, for_update=False):
 		item = frappe.db.sql("""select stock_uom, description, image, item_name,
 				expense_account, buying_cost_center, item_group, has_serial_no,
@@ -88,7 +93,7 @@ def get_request_details(docname):
 
 
 @frappe.whitelist()
-def recieve_stock_transfer(items, from_w, material_request=None):
+def recieve_stock_transfer(items, from_w, material_request=None, docname=None):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
 	filters={"default_transit": 1})[0].name
@@ -118,6 +123,9 @@ def recieve_stock_transfer(items, from_w, material_request=None):
 		})
 	stock_entry.insert()
 	stock_entry.submit()
+
+	frappe.db.set_value("Stock Transfer", docname, 'status', "Recieved")
+	
 	if material_request:
 		frappe.db.set_value("Material Request", material_request, 'status', "Transferred")
 		frappe.db.set_value("Material Request", material_request, 'per_ordered', 100)
@@ -126,7 +134,7 @@ def recieve_stock_transfer(items, from_w, material_request=None):
 
 
 @frappe.whitelist()
-def send_stock_transfer(items, from_w, material_request=None):
+def send_stock_transfer(items, from_w, material_request=None, docname=None):
 	transit_ware = frappe.db.get_list("Warehouse", 
 	fields= ["name"],
 	filters={"default_transit": 1})[0].name
@@ -156,6 +164,9 @@ def send_stock_transfer(items, from_w, material_request=None):
 
 	stock_entry.insert()
 	stock_entry.submit()
+
+	frappe.db.set_value("Stock Transfer", docname, 'status', "Sent")
+	
 	if material_request:
 		frappe.db.set_value("Material Request", material_request, 'status', "Issued")
 		frappe.db.set_value("Material Request", material_request, 'per_ordered', 50)
