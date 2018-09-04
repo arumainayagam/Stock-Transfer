@@ -63,6 +63,10 @@ def make_stock_transfer(docname, items):
 	args = json.loads(items)
 	stock_entry = frappe.new_doc("Stock Transfer")
 	stock_entry.material_request = docname
+
+	if all(c["warehouse"] == args[0]["warehouse"] for c in args):
+		stock_entry.from_warehouse = args[0]["warehouse"]
+
 	for x in args:
 		stock_entry.append("items", {
 		"t_warehouse": x["warehouse"],
