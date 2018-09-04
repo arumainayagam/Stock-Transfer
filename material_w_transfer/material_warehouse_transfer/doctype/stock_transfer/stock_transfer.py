@@ -65,7 +65,7 @@ def make_stock_transfer(docname, items):
 	stock_entry.material_request = docname
 
 	if all(c["warehouse"] == args[0]["warehouse"] for c in args):
-		stock_entry.from_warehouse = args[0]["warehouse"]
+		stock_entry.to_warehouse = args[0]["warehouse"]
 
 	for x in args:
 		stock_entry.append("items", {
