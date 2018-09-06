@@ -2,11 +2,11 @@
 	<div class="breadcrumb flat">
 		<a class="active">Submited</a>
 		
-		<a {% if(a.status == "Pending" || a.status == "Sent" || a.status == "Recieved") { %} class="active" {% } %} >Stock Transfer Created</a>
+		<a {% if(a) { %}{% if(a.status == "Pending" || a.status == "Sent" || a.status == "Recieved") { %} class="active" {% } %} {% } %} >Stock Transfer Created</a>
 		
-		<a {% if(a.status == "Sent" || a.status == "Recieved") { %} class="active" {% } %}>In Transit</a>
+		<a {% if(a) { %} {% if(a.status == "Sent" || a.status == "Recieved") { %} class="active" {% } %} {% } %}>In Transit</a>
 		
-		<a {% if(a.status == "Recieved") { %} class="active" {% } %}>Transferd</a>
+		<a {% if(a) { %} {% if(a.status == "Recieved") { %} class="active" {% } %} {% } %}>Transferd</a>
 
 	</div>
 </div>
