@@ -1,0 +1,8 @@
+{
+    "js/flow.min.js": [
+        "public/flow.html"
+    ],
+    "css/flow.min.css": [
+        "public/css/flow.css"
+    ]
+}

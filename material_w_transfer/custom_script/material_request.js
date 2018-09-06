@@ -1,6 +1,30 @@
 
 frappe.ui.form.on('Material Request', {
 	refresh: function (frm) {
+		if (frm.doc.material_request_type == "Material Transfer" && frm.doc.docstatus == 1) {
+			var a;
+			frappe.call({
+				method: "frappe.client.get_list",
+				args: {
+					doctype: "Stock Transfer",
+		            filters: [
+		                ["material_request", "=", frm.doc.name]
+		            ],
+		            limit_page_length: 1,
+		            fields: ["name", "status"]		            
+				},
+				async: false,
+				callback: function (r) {
+					if (r.message) {
+						console.log(r.message[0])
+						a = r.message[0];
+						// b - r.message
+					}
+				}
+			});
+
+			$(frm.fields_dict['flowboard'].wrapper).html(frappe.render_template("flow", {"a": a}));
+		}
 		if(frm.doc.status === "Pending" && frm.doc.docstatus == 1 && frm.doc.material_request_type == "Material Transfer"){
 			cur_frm.add_custom_button(__("Make Stock Trasnfer"), function(){
 				frappe.call({

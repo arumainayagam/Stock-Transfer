@@ -18,7 +18,9 @@ doctype_js = {
     "Material Request":["custom_script/material_request.js"]
 }
 # include js, css files in header of desk.html
-# app_include_css = "/assets/material_w_transfer/css/material_w_transfer.css"
+app_include_js = "/assets/js/flow.min.js"
+app_include_css = "/assets/css/flow.min.css"
+
 # app_include_js = "/assets/material_w_transfer/js/material_w_transfer.js"
 
 # include js, css files in header of web template
