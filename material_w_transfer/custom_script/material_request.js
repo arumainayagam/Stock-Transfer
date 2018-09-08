@@ -31,7 +31,8 @@ frappe.ui.form.on('Material Request', {
 					method: 'material_w_transfer.material_warehouse_transfer.doctype.stock_transfer.stock_transfer.make_stock_transfer',
 					args: {
 						docname: frm.doc.name,
-						items: frm.doc.items
+						items: frm.doc.items,
+						from_warehouse: frm.doc.from_warehouse
 
 					},
 					callback: function(r) {
