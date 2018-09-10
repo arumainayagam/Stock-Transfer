@@ -15,7 +15,7 @@ frappe.ui.form.on('Stock Transfer', {
 	        };
 	    });
 
-		if(frm.doc.status === "Sent" && frm.doc.docstatus == 1){
+		if(frm.doc.status === "Sent" && frm.doc.docstatus == 1 && frm.doc.owner == frappe.user.name){
 			cur_frm.add_custom_button(__("Recieve"), function(){
 				frappe.call({
 					method: 'material_w_transfer.material_warehouse_transfer.doctype.stock_transfer.stock_transfer.recieve_stock_transfer',
@@ -35,7 +35,7 @@ frappe.ui.form.on('Stock Transfer', {
 				});
  			});
  		}	
- 		if(frm.doc.status === "Pending" && frm.doc.docstatus == 1){
+ 		if(frm.doc.status === "Pending" && frm.doc.docstatus == 1 && frm.doc.f_w_owner == frappe.user.name){
 			cur_frm.add_custom_button(__("Send"), function(){
 				if (frm.doc.from_warehouse && frm.doc.to_warehouse) {
 				frappe.call({
