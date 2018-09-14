@@ -6,6 +6,7 @@ frappe.provide("erpnext.stock");
 
 frappe.ui.form.on('Stock Transfer', {
 	refresh: function(frm) {
+		cur_frm.fields_dict.items.grid.toggle_reqd("serial_no", frm.doc.is_serialised_items == 1)
 	    cur_frm.set_query("material_request", function() {
 	        return {
 	            "filters": {
@@ -63,6 +64,23 @@ frappe.ui.form.on('Stock Transfer', {
  		}		    
 
 	},
+	// before_submit: function(frm) {
+	// 	for (var i = 0; i < frm.doc.items.length; i++) {
+	// 		frappe.call({
+	// 			method: "frappe.client.get_value",
+	// 			args: {
+	// 				doctype: "Item",
+	// 				filters: {"name": frm.doc.items[i].item_code},
+	// 				fieldname: "has_serial_no"
+	// 			},
+	// 			callback: function(r){
+	// 				if(r.message && r.message.has_serial_no == 1){
+						
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// },
 	material_request: function (frm) {
 		if (frm.doc.material_request) {
 			frappe.call({
@@ -226,6 +244,31 @@ frappe.ui.form.on('Stock Transfer', {
 			flt(total_additional_costs, precision("total_additional_costs")));
 	},
 
+	onload: function(frm){
+		// var array = [];
+		// for (var i = 0; i < frm.doc.items.length; i++) {
+		
+		// cur_frm.refresh_fields()
+		// 	frappe.call({
+		// 		method: "frappe.client.get_value",
+		// 		args: {
+		// 			doctype: "Item",
+		// 			filters: {"name": frm.doc.items[i].item_code},
+		// 			fieldname: "has_serial_no"
+		// 		},
+		// 		async: false,
+		// 		callback: function(r){
+		// 			if(r.message){
+		// 				array.push(r.message)
+		// 			}
+		// 		}
+		// 	});			
+		// }
+
+
+
+	}
+
 });
 
 
@@ -343,6 +386,10 @@ frappe.ui.form.on('Stock Entry Detail', {
 	},
 	item_code: function(frm, cdt, cdn) {
 		var d = locals[cdt][cdn];
+		
+		console.log(d.has_serial_nos)
+		cur_frm.fields_dict.items.grid.toggle_reqd("serial_no", d.has_serial_nos == 1)
+
 		if(d.item_code) {
 			var args = {
 				'item_code'			: d.item_code,
@@ -375,7 +422,13 @@ frappe.ui.form.on('Stock Entry Detail', {
 			});
 		}		
 	}
+
 });
+
+// frappe.ui.form.on("Stock Entry Detail", "validate", function(frm, cdt, cdn) {
+// var d = locals[cdt][cdn];
+// alert("");
+// });
 erpnext.stock.select_batch_and_serial_no = (frm, item) => {
 	let get_warehouse_type_and_name = (item) => {
 		let value = '';
@@ -408,5 +461,7 @@ erpnext.stock.select_batch_and_serial_no = (frm, item) => {
 	});
 
 }
+
+
 
 

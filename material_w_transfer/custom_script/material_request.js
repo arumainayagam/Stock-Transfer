@@ -33,7 +33,8 @@ frappe.ui.form.on('Material Request', {
 					args: {
 						docname: frm.doc.name,
 						items: frm.doc.items,
-						from_warehouse: frm.doc.from_warehouse
+						from_warehouse: frm.doc.from_warehouse,
+						is_serialised_item_: frm.doc.is_serialised_item_
 
 					},
 					callback: function(r) {

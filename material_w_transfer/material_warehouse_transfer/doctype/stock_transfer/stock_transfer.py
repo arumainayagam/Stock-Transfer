@@ -56,14 +56,19 @@ class StockTransfer(Document):
 
 		return ret
 
+	# def before_submit(self):
+	# 	for x in self.get('items'):
+	# 		pass
+
 @frappe.whitelist()
-def make_stock_transfer(docname, items, from_warehouse):
+def make_stock_transfer(docname, items, from_warehouse, is_serialised_item_):
 	frappe.db.set_value("Material Request", docname, 'status', "Ordered")
 	frappe.db.set_value("Material Request", docname, 'per_ordered', 25)
 	args = json.loads(items)
 	stock_entry = frappe.new_doc("Stock Transfer")
 	stock_entry.material_request = docname
 	stock_entry.from_warehouse = from_warehouse
+	stock_entry.is_serialised_items = is_serialised_item_
 	
 
 	if all(c["warehouse"] == args[0]["warehouse"] for c in args):
