@@ -1,7 +1,21 @@
 
+
+
 frappe.ui.form.on('Material Request', {
+	onload: function (frm) {
+
+
+		frm.set_query("item_code", "items", function(doc, cdt, cdn) {
+			return {
+				filters: {
+					name: "ads"
+				}
+			};
+		});	
+	},
 	refresh: function (frm) {
-		
+
+
 		if (frm.doc.material_request_type == "Material Transfer" && frm.doc.docstatus == 1) {
 			var a;
 			frappe.call({
